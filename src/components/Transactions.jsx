@@ -8,7 +8,7 @@ const Transactions = ({transactions,setTransactions}) => {
         {
             return (
                 <Transaction 
-                serialNo = {transaction.serialNo}
+                serialNo={transaction.key}
                 type = {transaction.type}
                 reason = {transaction.reason}
                 amount={transaction.type == "credited" ?
@@ -16,7 +16,7 @@ const Transactions = ({transactions,setTransactions}) => {
                     '-'+transaction.amount
                 }
                 date = {transaction.date}
-                key = {transaction.serialNo}
+                key = {crypto.randomUUID()}
                 />
             )
         }

@@ -1,13 +1,27 @@
 import { useState } from 'react'
-
+import axios from "axios";
+import { useEffect } from 'react';
 import './App.css'
 import AddMoneyTab from './components/AddMoneyTab'
 import TransactionHistory from './components/TransactionHistory';
 function App() {
+  
   const [balance,setBalance] = useState(0)
-   const [transactions,setTransactions] = useState([
-     
-    ]);
+   const [transactions,setTransactions] = useState([]);
+   useEffect(()=>
+    {
+      axios.get("http://localhost:8080/transactionsDetails")
+        .then(res =>
+          {
+             setTransactions(res.data)
+
+             setBalance(res.data.at(-1).balance)
+             console.log(res.data);
+             
+             
+          })
+    },[]);
+   
   const [showAddMoneyTab,setShowAddMoneyTab] = useState(false);
   const [showAddExpenseTab,setShowAddExpenseTab] = useState(false);
   return (

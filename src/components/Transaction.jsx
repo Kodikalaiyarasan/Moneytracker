@@ -1,6 +1,6 @@
 import React from 'react'
 
-const Transaction = ({serialNo,type,reason,amount,date,key}) => {
+const Transaction = ({serialNo,type,reason,amount,date}) => {
   return (
     <div className='transaction-container'>
       <div className="serial-no">{serialNo}</div>

@@ -1,9 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from "axios"
 import '../App.css'
 const AddMoneyTab = ({setShowAddMoneyTab,transactions,setTransactions,touchedElement,balance,setBalance}) => {
     const [amount,setAmount] = React.useState(0);
     const [reason,setReason] = React.useState('');
-
+    
+    // useEffect(()=>
+    // {
+    //   axios.get("http://localhost:8080/transactionsDetails")
+    //     .then(res => setTransactions(res.data))
+    // },[]);
+   
     function displayTransactions()
     {
         if(reason == '' && balance == 0) 
@@ -14,16 +21,14 @@ const AddMoneyTab = ({setShowAddMoneyTab,transactions,setTransactions,touchedEle
         if(touchedElement == 'expenses')
         {
             if(balance - amount < 0)
+            {
                alert("Insufficient balance ")
             return;
+            }
 
         }
-        setBalance(touchedElement=='expenses'
-          ? balance - amount : balance + amount
-        )
-        setTransactions([
-            ...transactions,
-            {
+       
+        axios.post("http://localhost:8080/addTransaction", {
                 serialNo : transactions.length+1,
                 type : (touchedElement == "expenses") ? "debited" : "credited",
                 reason : reason,
@@ -38,9 +43,19 @@ const AddMoneyTab = ({setShowAddMoneyTab,transactions,setTransactions,touchedEle
                 hour12: false
               }), 
               key :transactions.length+1
-            }
-        ])
-
+            })
+        .then(res => 
+          {
+            setTransactions([...transactions,res.data]);
+            setBalance(res.data.balance)
+            setAmount(0);
+            setReason('');
+            setShowAddMoneyTab(false);
+            console.log(res.data);
+            
+          }
+          )
+         .catch(err => console.error("Error adding transaction:", err));
     }
 
   return (
@@ -76,10 +91,7 @@ const AddMoneyTab = ({setShowAddMoneyTab,transactions,setTransactions,touchedEle
                 setReason('');
                 if ((touchedElement === "expenses" && amount > balance) ||(reason == '' && balance == 0))return; 
 
-                setShowAddMoneyTab(false);
-
-
-                
+                setShowAddMoneyTab(false);               
             }
            }>Save</button>
        </form>     
