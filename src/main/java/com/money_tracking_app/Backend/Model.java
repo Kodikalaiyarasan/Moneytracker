@@ -13,7 +13,6 @@ public class Model {
     private String type;
     private String reason;
     private int amount;
-    private int balance;
     private String date;
     private int key;
 
@@ -27,14 +26,6 @@ public class Model {
 
     public int getAmount() {
         return amount;
-    }
-
-    public int getBalance() {
-        return balance;
-    }
-
-    public void setBalance(int balance) {
-        this.balance = balance;
     }
 
     public void setAmount(int amount) {

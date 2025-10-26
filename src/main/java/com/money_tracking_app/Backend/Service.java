@@ -14,21 +14,6 @@ public class Service {
     }
 
     public Model addTransaction(Model model) {
-
-        Model previousModel =repo.findTopByOrderBySerialNoDesc();
-        int previousBalance = previousModel!=null ? previousModel.getBalance() : 0;
-        int newBalance;
-        if ("credited".equalsIgnoreCase(model.getType())) {
-            newBalance = previousBalance + model.getAmount();
-        } else if ("debited".equalsIgnoreCase(model.getType())) {
-            newBalance = previousBalance - model.getAmount();
-        } else {
-            throw new IllegalArgumentException("Invalid transaction type");
-        }
-
-        System.out.println(newBalance);
-        System.out.println(previousBalance);
-        model.setBalance(newBalance);
         return repo.save(model);
     }
 
@@ -42,4 +27,19 @@ public class Service {
 
         return false;
     }
+    public int getCurrentBalance()
+    {
+        int currentBalance = 0;
+
+             List<Model> list = repo.findAll();
+            for(Model m : list)
+            {
+                if("credited".equalsIgnoreCase(m.getType())) currentBalance += m.getAmount();
+                else currentBalance -= m.getAmount();
+            }
+           // if(currentBalance<=0) repo.deleteAll();
+            return Math.max(currentBalance, 0);
+
+    }
+
 }

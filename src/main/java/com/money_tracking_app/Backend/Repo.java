@@ -7,6 +7,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface Repo extends JpaRepository<Model,Integer> {
 
-    Model findTopByOrderBySerialNoDesc();
-
 }
